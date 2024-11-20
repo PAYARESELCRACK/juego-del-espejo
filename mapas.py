@@ -7,7 +7,7 @@ class Mapas:
                 'luz_pos': (0, 0),      # Posición inicial de la luz (y, x)
                 'luz_dir': (1, 0),      # Dirección inicial de la luz (abajo)
                 'meta_pos': (7, 7),     # Posición de la meta (y, x)
-                'obstaculos': [         # Lista de obstáculos (y, x)
+                'obstaculos': [         # Espejos ocultos en lugar de obstáculos
                     (2, 3),
                     (2, 4),
                     (3, 3),
@@ -27,10 +27,10 @@ class Mapas:
                 'luz_pos': (0, 5),      # Luz comienza en el centro superior
                 'luz_dir': (1, 0),      # Dirección inicial hacia abajo
                 'meta_pos': (9, 5),     # Meta en el centro inferior
-                'obstaculos': [         # Patrón de obstáculos más complejo
+                'obstaculos': [         # Patrón de espejos invisibles
                     (3, 3), (3, 4), (3, 5), (3, 6), (3, 7),  # Barrera horizontal
                     (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),  # Segunda barrera
-                    (4, 1), (5, 1),                          # Obstáculos laterales
+                    (4, 1), (5, 1),                          # Espejos laterales
                     (4, 8), (5, 8)
                 ],
                 'descripcion': """
@@ -42,7 +42,7 @@ class Mapas:
                 """
             }
         }
-        
+
         return mapas.get(numero_mapa, None)
 
     @staticmethod

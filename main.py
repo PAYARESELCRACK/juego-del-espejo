@@ -4,7 +4,7 @@ from mapas import Mapas
 def main():
     # Mostrar mapas disponibles
     Mapas.listar_mapas()
-    
+
     while True:
         try:
             nivel = int(input("\nSeleccione un nivel (1-2): "))
@@ -14,21 +14,18 @@ def main():
             break
         except ValueError:
             print("Por favor ingrese un número válido")
-    
+
     # Obtener configuración del mapa
     config_mapa = Mapas.obtener_mapa(nivel)
-    
+
     # Crear instancia del juego con la configuración del mapa
     juego = ap.Juego(tamano=config_mapa['tamano'])
-    
-    # Configurar el nivel
     juego.configurar_nivel_personalizado(
-        pos_luz=config_mapa['luz_pos'],
-        dir_luz=config_mapa['luz_dir'],
-        pos_meta=config_mapa['meta_pos'],
-        obstaculos=config_mapa['obstaculos']
+        pos_luz=(0, 0),
+        dir_luz=(1, 0),
+        espejos_ocultos=config_mapa['obstaculos']
     )
-    
+
     # Mostrar descripción del nivel
     print(config_mapa['descripcion'])
     input("Presione Enter para comenzar...")
@@ -36,50 +33,44 @@ def main():
     while True:
         juego.mostrar_tablero()
         print("\nOpciones:")
-        print("1. Colocar espejo")
-        print("2. Eliminar espejo")
+        print("1. Colocar marca (X)")
+        print("2. Eliminar marca")
         print("3. Simular trayectoria de luz")
-        print("4. Ver historial")
+        print("4. Finalizar partida")
         print("5. Salir")
-        
+
         opcion = input("\nSeleccione una opción: ")
-        
-        if opcion == "1":
+
+        if opcion == "1":  # Colocar marca
+            if juego.marcas_restantes > 0:
+                try:
+                    x = int(input("Ingrese posición X: "))
+                    y = int(input("Ingrese posición Y: "))
+                    exito, mensaje = juego.colocar_marca(x, y)
+                    print(mensaje)
+                except ValueError:
+                    print("Entrada inválida")
+            else:
+                print("No te quedan marcas disponibles.")
+
+        elif opcion == "2":  # Eliminar marca
             try:
-                x = int(input("Ingrese posición X: "))
-                y = int(input("Ingrese posición Y: "))
-                print("\nTipos de espejo:")
-                print("1: Diagonal (/)   2: Diagonal (\\)")
-                print("3: Horizontal (─)  4: Vertical (│)")
-                tipo = int(input("Seleccione tipo de espejo: "))
-                if tipo not in [1, 2, 3, 4]:
-                    print("Tipo de espejo inválido")
-                    continue
-                    
-                exito, mensaje = juego.colocar_espejo(x, y, tipo)
+                x = int(input("Ingrese posición X de la marca a eliminar: "))
+                y = int(input("Ingrese posición Y de la marca a eliminar: "))
+                exito, mensaje = juego.eliminar_marca(x, y)
                 print(mensaje)
             except ValueError:
                 print("Entrada inválida")
 
-        elif opcion == "2":
-            try:
-                 x = int(input("Ingrese posición X del espejo a eliminar: "))
-                 y = int(input("Ingrese posición Y del espejo a eliminar: "))
-                 exito, mensaje = juego.eliminar_espejo(x, y)
-                 print(mensaje)
-            except ValueError:
-                print("Entrada inválida")
-            
-                
-        elif opcion == "3":
+        elif opcion == "3":  # Simular trayectoria de luz
             juego.simular_luz()
             input("\nPresione Enter para continuar...")
-            
-        elif opcion == "4":
-            juego.mostrar_historial()
-            input("\nPresione Enter para continuar...")
-            
-        elif opcion == "5":
+
+        elif opcion == "4":  # Finalizar partida
+            juego.finalizar_partida()
+            break
+
+        elif opcion == "5":  # Salir del juego
             print("¡Gracias por jugar!")
             break
 
